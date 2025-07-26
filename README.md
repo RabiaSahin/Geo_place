@@ -11,7 +11,7 @@ Project is a simple end-to-end test automation project to test the [Genderize.io
 - WebDriverManager
 - Git
 
-## Project Scope
+## What This Project Covers
 
 The project consists of *two main tasks*:
 
@@ -40,6 +40,23 @@ The project consists of *two main tasks*:
 ## How It Works
 The test simulates a user entering a name into a sample web interface using the Genderize.io API, and verifies the gender predicted.
 
+## Running Specific Features
+- This project contains two separate feature sets: **search** and **api**.
+
+To run these features, you need to check and update the tag in the Cukes Runner class accordingly:
+
+- To run the **search** feature, set the tag in the Runner class to:
+
+    @CucumberOptions(tags = "@search")
+
+- To run the **api** feature, set the tag to:
+
+  @CucumberOptions(tags = "@api")
+
+## Note on API Feature
+This API returns HTTP status code 200 for all requests, including those with invalid inputs that would typically return 4xx errors.
+Therefore, scenarios expecting 4xx errors are implemented by checking warning or error messages in the response body instead of status codes.
+
 ## Project Directory Structure
 
 - `pages/` → Page Object Model (POM) directory
@@ -56,3 +73,4 @@ Scenario: Gender prediction validation
   When I enter the name "Alex" into inputbox
   And Click the search button
   Then I should see the predicted gender as "male"
+
