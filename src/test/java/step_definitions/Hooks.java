@@ -1,6 +1,7 @@
 package step_definitions;
 
 import io.cucumber.java.Before;
+import io.restassured.RestAssured;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -23,6 +24,7 @@ public class Hooks {
         driver.get(ConfigurationReader.getProperty("url"));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        RestAssured.baseURI = ConfigurationReader.getProperty("api.baseUrl");
 //        actions = new Actions(driver);
 //        wait = new WebDriverWait(driver,Long.parseLong(ConfigurationReader.get("explicitWait")));
     }

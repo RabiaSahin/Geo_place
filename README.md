@@ -11,6 +11,32 @@ Project is a simple end-to-end test automation project to test the [Genderize.io
 - WebDriverManager
 - Git
 
+## Project Scope
+
+The project consists of *two main tasks*:
+
+### Task 1: UI Automation
+
+- *Test tool*: Selenium WebDriver
+- *BDD Framework*: Cucumber
+- *Test goal*: Input a name into the search bar on the UI and verify that the predicted gender appears correctly.
+- *Browser*: Chrome
+- *Utilities*:
+    - Reusable Driver class
+    - Custom Hooks for setup and teardown
+    - Dynamic waits and assertions
+
+### ✅ Task 2: API Automation
+
+- *API*: https://api.genderize.io
+- *Test tool*: RestAssured
+- *Test cases include*:
+    - Sending GET requests with names and country codes
+    - Verifying response status codes
+    - Asserting predicted genders
+    - Handling multiple name queries
+
+
 ## How It Works
 The test simulates a user entering a name into a sample web interface using the Genderize.io API, and verifies the gender predicted.
 

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.HomePage;
+import utilities.BrowserUtils;
 import utilities.Driver;
 import java.time.Duration;
 
@@ -29,19 +30,17 @@ public class Search_StepDefinition {
     public void click_the_search_button() {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
-      //  BrowserUtils.waitForVisibility(homePage.predictedGender, 30);
 
-        try {
+        //BrowserUtils.waitForVisibility(homePage.predictedGender, 30);
+        //wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
+         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         button.click();
-      /*  try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }*/
+
     }
 
     @Then("I should see the predicted gender as {string}")
