@@ -215,6 +215,17 @@ public class BrowserUtils {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
+    //*****************//
+
+    public static void waitForMilliseconds(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while waiting", e);
+        }
+    }
+   // ***********************//
 
     /**
      * Waits for element matching the locator to be clickable

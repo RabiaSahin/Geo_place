@@ -2,6 +2,7 @@ package runners;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
+import step_definitions.Search_StepDefinition;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -12,7 +13,7 @@ import org.junit.runner.RunWith;
                 "rerun:target/rerun.txt",
         },
         features = "src/test/resources/features",
-        glue = "src/test/java/step_definitions",
+        glue = "step_definitions",
         dryRun = false,
         tags = "@ui"
 

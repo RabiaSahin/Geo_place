@@ -31,16 +31,8 @@ public class Search_StepDefinition {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
 
-        //BrowserUtils.waitForVisibility(homePage.predictedGender, 30);
-        //wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
-         try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
+        BrowserUtils.waitForMilliseconds(2000);
         button.click();
-
     }
 
     @Then("I should see the predicted gender as {string}")
