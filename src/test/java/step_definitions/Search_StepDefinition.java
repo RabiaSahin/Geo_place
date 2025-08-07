@@ -26,10 +26,10 @@ public class Search_StepDefinition {
     @And("Click the search button")
     public void click_the_search_button() {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
+        wait.until(ExpectedConditions.elementToBeClickable(homePage.searchButton));
 
         BrowserUtils.waitForMilliseconds(2000);
-        button.click();
+        homePage.searchButton.click();
     }
 
     @Then("I should see the predicted gender as {string}")
