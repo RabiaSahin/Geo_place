@@ -26,7 +26,7 @@ public class Driver {
     }
 
     public synchronized static WebDriver getDriver(String browser) {
-        // String browser ==>  it originally comes from xml file to test base class, from test base it comes here
+        // String browser ==>  it originally comes from xml file to test base class, from test base it comes here. (for TestNG)
         if (driver == null) {
             // first we check if the value from xml file is null or not
             // if the value from xml file NOT null we use

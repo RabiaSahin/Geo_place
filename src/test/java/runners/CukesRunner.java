@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
                 "json:target/cucumber.json",
                 "html:target/cucumber-report.html",
-                "rerun:target/rerun.txt",
+                "rerun:target/rerun.txt"
         },
         features = "src/test/resources/features",
         glue = "step_definitions",
