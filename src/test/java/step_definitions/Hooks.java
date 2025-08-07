@@ -16,7 +16,7 @@ import java.time.Duration;
 
 public class Hooks {
 
-    @Before
+    @Before("@ui")
     public void setUp(){
         Actions actions;
         WebDriverWait wait;
@@ -24,11 +24,10 @@ public class Hooks {
         driver.get(ConfigurationReader.getProperty("url"));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        RestAssured.baseURI = ConfigurationReader.getProperty("api.baseUrl");
 //        actions = new Actions(driver);
 //        wait = new WebDriverWait(driver,Long.parseLong(ConfigurationReader.get("explicitWait")));
     }
-    @After
+    @After("@ui")
     public void teardownScenario(Scenario scenario){
 
         //scenario.isFailed() --> if scenario fails this method will return TRUE boolean value
@@ -39,8 +38,8 @@ public class Hooks {
 
         }
 
-       //    BrowserUtils.sleep(3);
-           Driver.closeDriver();
+        //    BrowserUtils.sleep(3);
+        Driver.closeDriver();
 
     }
 
@@ -52,6 +51,17 @@ public class Hooks {
     //    @AfterStep
     public void afterStep(){
         System.out.println("--------> applying tearDown using @AfterStep");
+    }
+
+    @Before("@api")
+    public void setUpApi(){
+        RestAssured.baseURI = ConfigurationReader.getProperty("api.baseUrl");
+    }
+
+    @After("@api")
+    public void teardownScenarioApi(Scenario scenario) {
+
+
     }
 
 }

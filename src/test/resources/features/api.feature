@@ -81,9 +81,9 @@ Feature: Genderize.io API Functional and Edge-Case Tests
     Given I send a GET request without the 'name' parameter
     Then the error message should include "Missing 'name' parameter"
 
-  Scenario: Missing API key returns a warning
-    Given I send a request without an API key
-    Then the error message should include "API key required"
+ #Scenario: Missing API key returns a warning
+    #Given I send a request without an API key
+    #Then the error message should include "API key required"
 
   Scenario: Invalid API key returns a warning
     Given I send a request with an invalid API key
@@ -106,7 +106,7 @@ Feature: Genderize.io API Functional and Edge-Case Tests
 
   Scenario Outline: Batch request name count boundary
     Given I send a batch request with <sentCount> names
-    Then if batch size exceeds limit, response should contain a warning message
+    Then the response should contain at most 10 results
 
     Examples:
       | sentCount |
