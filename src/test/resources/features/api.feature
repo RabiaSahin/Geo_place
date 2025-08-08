@@ -73,7 +73,7 @@ Feature: Genderize.io API Functional and Edge-Case Tests
 
     Examples:
       | code |
-      | US   |
+      | UKS  |
       | XX   |
       | ABC  |
 

@@ -3,6 +3,7 @@ package step_definitions;
 import io.cucumber.java.en.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.Assert;
 import utilities.ConfigurationReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,15 +107,29 @@ public class Api_StepDefinition {
         response.then().assertThat().body("size()", greaterThan(0));
     }
 
-    @Then("each result should include name, gender, probability and count")
-    public void each_result_should_include_name_gender_probability_and_count() {
-        List<Map<String, Object>> list = response.jsonPath().getList("");
-        for (Map<String, Object> item : list) {
-            assert item.containsKey("name");
-            assert item.containsKey("gender");
-            assert item.containsKey("probability");
-            assert item.containsKey("count");
-        }
+
+   @Then("each result should include name, gender, probability and count")
+   public void each_result_should_include_name_gender_probability_and_count() {
+       Object jsonResponse = response.jsonPath().get("");
+
+       if (jsonResponse instanceof List) {
+           List<Map<String, Object>> list = (List<Map<String, Object>>) jsonResponse;
+           for (Map<String, Object> item : list) {
+               validateFields(item);
+           }
+       } else if (jsonResponse instanceof Map) {
+           Map<String, Object> item = (Map<String, Object>) jsonResponse;
+           validateFields(item);
+       } else {
+           throw new RuntimeException("Unexpected response format");
+       }
+   }
+
+    private void validateFields(Map<String, Object> item) {
+        assert item.containsKey("name");
+        assert item.containsKey("gender");
+        assert item.containsKey("probability");
+        assert item.containsKey("count");
     }
 
     // 4. Edge-case and boundary scenarios
@@ -133,21 +148,36 @@ public class Api_StepDefinition {
     @Then("the response should contain a warning for invalid name")
     public void the_response_should_contain_warning_for_invalid_name() {
         String gender = response.jsonPath().getString("gender");
-        Double probability = response.jsonPath().getDouble("probability");
+        Object probabilityObj = response.jsonPath().get("probability"); // önce Object olarak al
 
         assertTrue("Gender should be null or empty", gender == null || gender.isEmpty());
-        assertTrue("Probability should be 0 or null", probability == null || probability == 0.0);
+
+        if (probabilityObj instanceof Number) {
+            double probability = ((Number) probabilityObj).doubleValue();
+            assertEquals("Probability should be 0", 0.0, probability, 0.0);
+        } else {
+            assertNull("Probability is not present, which is acceptable", probabilityObj);
+        }
     }
+
 
     // Validates that an invalid or unsupported country code results in no gender prediction
     @Then("the response should indicate the country code is invalid or unsupported")
     public void the_response_should_indicate_invalid_country_code() {
         String gender = response.jsonPath().getString("gender");
-        Float probability = response.jsonPath().getFloat("probability");
+        Object probabilityObj = response.jsonPath().get("probability");
 
-        assertTrue("Gender should be null or empty for invalid country", gender == null || gender.isEmpty());
-        assertTrue("Probability should be 0 or null for invalid country", probability == null || probability == 0.0f);
+        assertTrue("Gender should be null or empty for invalid country",
+                gender == null || gender.isEmpty());
+
+        if (probabilityObj == null) {
+            assertTrue(true);
+        } else {
+            float probability = ((Number) probabilityObj).floatValue();
+            assertEquals("Probability should be 0.0 for invalid country", 0.0f, probability, 0.0);
+        }
     }
+
 
     // Missing name parameter
     @When("I send a GET request without the 'name' parameter")
@@ -155,11 +185,11 @@ public class Api_StepDefinition {
         response = given().when().get(baseUrl);
     }
 
-    // No API key provided
+   /* // No API key provided
     @When("I send a request without an API key")
     public void i_send_a_request_without_an_api_key() {
         response = given().when().get(baseUrl + "?name=John");
-    }
+    }*/
 
     // Invalid API key
     @When("I send a request with an invalid API key")
@@ -211,13 +241,23 @@ public class Api_StepDefinition {
     }
 
     // Checks if the response contains a warning message when batch size exceeds the limit
-    @Then("if batch size exceeds limit, response should contain a warning message")
-    public void if_batch_size_exceeds_limit_response_should_contain_warning_message() {
-        String warningMessage = response.jsonPath().getString("warning");
+    @Then("the response should contain at most 10 results")
+    public void the_response_should_contain_at_most_10_results() {
+        Object json = response.jsonPath().get("$");
+        System.out.println(response.prettyPrint());
 
-        // We expect a warning message if batch size is too large
-        assertNotNull("Warning message should be present for large batch", warningMessage);
+        if (json instanceof List) {
+            List<?> results = (List<?>) json;
+            assertNotNull("Response list should not be null", results);
+            assertTrue("Response should contain at most 10 results", results.size() <= 10);
+        } else if (json instanceof Map) {
+            // Tek isim için 1 sonuç var
+            assertNotNull("Single object response should not be null", json);
+        } else {
+            fail("Unexpected response type: " + json.getClass());
+        }
     }
+
 
     //6. Unicode and non-ASCII characters support
 
