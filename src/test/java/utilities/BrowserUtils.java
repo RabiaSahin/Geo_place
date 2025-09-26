@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class BrowserUtils {
@@ -149,6 +150,38 @@ public class BrowserUtils {
         }
         return elemTexts;
     }
+
+    public static List<WebElement> getVisibleElements(List<WebElement> elements) {
+        List<WebElement> visibleElements = new ArrayList<>();
+        for (WebElement el : elements) {
+            if (el.isDisplayed()) {
+                visibleElements.add(el);
+            }
+        }
+        return visibleElements;
+    }
+
+    // BrowserUtils.java
+    public static WebElement getVisibleElementByTextWithScroll(List<WebElement> elements, String visibleText) {
+        for (WebElement el : elements) {
+            if (el.isDisplayed() && el.getText().equalsIgnoreCase(visibleText)) {
+                scrollToElement(el);
+                return el;
+            }
+        }
+        throw new RuntimeException(visibleText + " element not found or not visible");
+    }
+
+    public static WebElement getRandomVisibleElementWithScroll(List<WebElement> elements) {
+        List<WebElement> visibleElements = getVisibleElements(elements);
+        if (visibleElements.isEmpty()) {
+            throw new RuntimeException("No visible elements found!");
+        }
+        WebElement randomElement = visibleElements.get(new Random().nextInt(visibleElements.size()));
+        scrollToElement(randomElement);
+        return randomElement;
+    }
+
 
     /**
      * Extracts text from list of elements matching the provided locator into new List<String>
